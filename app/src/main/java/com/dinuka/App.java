@@ -4,10 +4,10 @@ import java.util.Scanner;
 
 public class App {
     // public String getGreeting() {
-    //     return "Hello World!";
+    // return "Hello World!";
     // }
 
-    //inside main >>> // System.out.println(new App().getGreeting());
+    // inside main >>> // System.out.println(new App().getGreeting());
 
     public static void main(String[] args) {
 
@@ -17,8 +17,9 @@ public class App {
         System.out.println("Enter Your Username: ");
         String enteredUsername = nameScanner.nextLine();
 
-        
+   
 
-        
+      ;
+
     }
 }
