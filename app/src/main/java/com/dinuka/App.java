@@ -13,50 +13,23 @@ public class App {
 
         welcomeMsg();
 
-        if (!UserManager.checkUserNameExistance()) {
-
-            System.out.println("Given Username not found");
-            System.out.println();
-
-            Scanner scan = new Scanner(System.in);
-            int userChoice;
-
-            while (true) {
-
-                try {
-                    System.out.println("Choose Next Action ");
-                    System.out.println("Enter 1 for create a new profile");
-                    System.out.println("Enter 2 for Exit");
-
-                    if (scan.hasNextInt()) {
-                        userChoice = scan.nextInt();
-
-                        if (userChoice == 1) {
-                            UserManager.createNewProfile();
-                            break;
-                        } else if (userChoice == 2) {
-                            System.exit(0);
-                        } else {
-                            // how to run the same thing again in here????
-                        }
-
-                    } else {
-                        String invalidInput = scan.next();
-                        System.out.println("Invalid input. '" + invalidInput + "' is not a number. Please try again.");
-                    }
-
-                } catch (Exception e) {
-
-                    System.out.println("An error occurred. Please enter a valid number.");
-                    scan.next(); // Clear the invalid input
-
-                }
-
+        while (true) { // Keep the app running
+            if (!UserManager.checkUserNameExistance()) {
+                System.out.println("NAME NOT FOUND");
+                InputHandler.handleUserNotFound();
+            } else {
+                System.out.println("Welcome back!");
+                // Proceed with the main application logic here
+                break; // Exit the loop or add a main menu loop
             }
-
-            scan.close();
-
         }
+
+        // if (!UserManager.checkUserNameExistance()) {
+
+        //     System.out.println("user name not found");
+        //     InputHandler.handleUserNotFound();
+
+        // }
 
     }
 
