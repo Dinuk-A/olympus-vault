@@ -2,6 +2,10 @@ package com.dinuka;
 
 import java.util.Scanner;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.mindrot.jbcrypt.BCrypt;
+
 public class InputHandler {
 
     private static final Scanner scan = new Scanner(System.in);
@@ -70,5 +74,43 @@ public class InputHandler {
                     System.out.println("Invalid option. Please try again.");
             }
         }
+    }
+
+    // check pws
+    public static boolean validatePw() {
+
+        Scanner scanner = new Scanner(System.in);
+        JSONArray userList = UserManager.getUserList();
+        String username = UserManager.getLAstCheckedUserName();
+
+        for (int attempt = 0; attempt < 3; attempt++) {
+
+            System.out.print("Enter your password (or type 'EXIT' to quit): ");
+            String enteredPw = scanner.nextLine();
+
+            if (enteredPw.equalsIgnoreCase("EXIT")) {
+                System.out.println("Exiting...");
+                System.exit(0);
+            }
+
+            for (int i = 0; i < userList.length(); i++) {
+                JSONObject user = userList.getJSONObject(i);
+
+                if (user.getString("username").equals(username)) {
+
+                    String storedPw = user.getString("password");
+
+                    if (BCrypt.checkpw(enteredPw, storedPw)) {
+                        return true;
+                    } else {
+                        System.out.println("Incorrect password. Try again. You have " + (2 - attempt) + " attempts");
+                    }
+                }
+            }
+        }
+        System.out.println("Maximum attempts reached. Exiting...");
+        System.exit(0);
+
+        return false;
     }
 }

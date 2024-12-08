@@ -24,6 +24,10 @@ dependencies {
 
     //to implement json features
      implementation 'org.json:json:20230227'
+
+    // To implement BCrypt for password hashing
+    implementation 'org.mindrot:jbcrypt:0.4'
+
 }
 
 // Apply a specific Java toolchain to ease working on different environments.

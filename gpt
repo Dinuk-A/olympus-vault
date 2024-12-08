@@ -1,0 +1,12 @@
+public static void clearConsole() {
+    String os = System.getProperty("os.name").toLowerCase();
+    try {
+        if (os.contains("win")) {
+            Runtime.getRuntime().exec("cls");
+        } else {
+            Runtime.getRuntime().exec("clear");
+        }
+    } catch (IOException e) {
+        System.out.println("Error clearing console");
+    }
+}

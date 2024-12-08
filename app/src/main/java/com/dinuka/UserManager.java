@@ -10,14 +10,43 @@ import org.json.JSONObject;
 
 import java.util.Scanner;
 
+import java.io.BufferedReader;
+
+import org.mindrot.jbcrypt.BCrypt;
+
 public class UserManager {
 
-    // get the users data by reading the user.json file
     public static JSONArray getUserList() {
+        final String USER_DB_FILE = "D:\\PROJECTS\\Olympus Vault\\app\\src\\main\\resources\\users.json";
+        File userFile = new File(USER_DB_FILE);
+
+        if (!userFile.exists()) {
+            System.out.println("File not found: " + USER_DB_FILE);
+            return new JSONArray();
+        }
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(userFile))) {
+            StringBuilder content = new StringBuilder();
+            String line = reader.readLine(); // Step 1: Read a line from the file
+            while (line != null) { // Read file line by line
+                content.append(line);
+                line = reader.readLine(); // Read the next line
+            }
+            return new JSONArray(content.toString()); // Parse the file content
+        } catch (IOException e) {
+            e.printStackTrace();
+            return new JSONArray(); // Return an empty array on I/O error
+        } catch (org.json.JSONException e) {
+            System.out.println("Error: Invalid JSON format in the users.json file.");
+            return new JSONArray(); // Return an empty array on JSON error
+        }
+    }
+
+    // get the users data by reading the user.json file
+    public static JSONArray getUserListOri() {
 
         // save as a var
         final String USER_DB_FILE = "D:\\PROJECTS\\Olympus Vault\\app\\src\\main\\resources\\users.json";
-
 
         // convert into a File
         File userFile = new File(USER_DB_FILE);
@@ -63,6 +92,10 @@ public class UserManager {
 
     }
 
+    // Global var
+    // to support pw validation
+    private static String lastCheckedUsername;
+
     // CHECK THE PASSED USERNAME'S EXISTANCE
     public static boolean checkUserNameExistance() {
 
@@ -77,6 +110,7 @@ public class UserManager {
             JSONObject userJsonObj = userList.getJSONObject(i);
 
             if (userJsonObj.getString("username").equals(passedUserName)) {
+                lastCheckedUsername = passedUserName;
                 return true;
             }
         }
@@ -84,26 +118,23 @@ public class UserManager {
         return false;
     }
 
-    // need to create ORIGINAL
-    // public static void createNewProfile() {
-
-    //     System.out.println("to profile creation");
-    //     System.out.println("this will implemented later");
-
-    // }
+    // to support pw validation
+    public static String getLAstCheckedUserName() {
+        return lastCheckedUsername;
+    }
 
     public static void createNewProfile() {
         Scanner scanner = new Scanner(System.in);
         System.out.println("=== Profile Creation ===");
-        
+
         // Collect new username
         System.out.print("Enter a new username: ");
         String newUsername = scanner.nextLine();
-    
+
         // Collect new password
         System.out.print("Enter a password: ");
         String newPassword = scanner.nextLine();
-    
+
         // Validate username uniqueness
         JSONArray userList = getUserList();
         for (int i = 0; i < userList.length(); i++) {
@@ -113,40 +144,31 @@ public class UserManager {
                 return; // Exit this method and go back to the username check
             }
         }
-    
+
+        String hashedPw = BCrypt.hashpw(newPassword, BCrypt.gensalt());
+
         // Create a new JSON object for the profile
         JSONObject newUser = new JSONObject();
         newUser.put("username", newUsername);
-        newUser.put("password", newPassword); // Ideally, hash the password for security
-    
+        newUser.put("password", hashedPw);
+
         // Add to the user list
         userList.put(newUser);
-    
+
         // Save back to the file
         saveUserList(userList);
-    
+
         System.out.println("Profile created successfully!");
     }
 
-    // public static void saveUserList(JSONArray userList) {
-    //     final String USER_DB_FILE = "resources/users.json";
-    
-    //     try (FileWriter fileWriter = new FileWriter(USER_DB_FILE)) {
-    //         fileWriter.write(userList.toString());
-    //         fileWriter.flush();
-    //     } catch (IOException e) {
-    //         System.out.println("Error saving user data: " + e.getMessage());
-    //     }
-    // }
-
     public static void saveUserList(JSONArray userList) {
-        final String USER_DB_FILE = "resources/users.json";
+        final String USER_DB_FILE = "D:\\PROJECTS\\Olympus Vault\\app\\src\\main\\resources\\users.json";
         File userFile = new File(USER_DB_FILE);
-    
+
         try {
             // Ensure the directory exists
             userFile.getParentFile().mkdirs();
-            
+
             // Write data to the file
             try (FileWriter fileWriter = new FileWriter(userFile)) {
                 fileWriter.write(userList.toString());
@@ -156,8 +178,8 @@ public class UserManager {
             System.out.println("Error saving user data: " + e.getMessage());
         }
     }
-    
-    
+
+
     
 
 }
