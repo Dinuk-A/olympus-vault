@@ -113,4 +113,37 @@ public class InputHandler {
 
         return false;
     }
+
+    public static void mainMenu() {
+        Scanner scannerMM = new Scanner(System.in);
+    
+        System.out.println("\n=== Main Menu ===");
+        System.out.println("1. Create a New Password Record");
+        System.out.println("2. View all records");
+        System.out.println("3. Exit");
+        System.out.print("Choose an option: ");
+    
+        String choice = scannerMM.nextLine();
+    
+        switch (choice) {
+            case "1":
+                System.out.println("Creating a New Password Record");
+                MainOps.createNewRecord();
+                break;
+            case "2":
+                System.out.println("Viewing all records");
+                MainOps.viewAllRecs();
+                System.out.println("\nPress Enter to go back to the main menu...");
+                scannerMM.nextLine(); 
+
+                break;
+            case "3":
+                System.out.println("Exiting the application. Goodbye!");
+                System.exit(0); 
+                break;
+            default:
+                System.out.println("Invalid option. Please try again.");
+        }
+    }
+    
 }

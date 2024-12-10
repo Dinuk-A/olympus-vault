@@ -1,0 +1,12 @@
+{"dinuka": [
+    {
+        "password": "$2a$10$B17mH4eZGu5O.jhoY0Cza.r4W4LbHifGqzHcwXlShHTRpW9X3.hk.",
+        "hint": "$2a$10$Dld3hF0ATEEuro3E/.oCv.UVfJHnFl5GsdBxviE9p7lAItj74NGRS",
+        "name": "test name 1"
+    },
+    {
+        "password": "$2a$10$3mNTN375AmXSdpqusiCetemmmMJKrjRAalnwHkbT7qXvMU2pKtCeS",
+        "hint": "$2a$10$W5SUesjc2nnMDVBLSYMYYewHq3DrdzXhadcKmKFJ3KwwuG4lfA8c6",
+        "name": "scope"
+    }
+]}

@@ -18,13 +18,18 @@ public class App {
                 if (InputHandler.validatePw()) {
                     // Utils.clearConsole();
                     System.out.println("You have entered the main application!");
+
+                    while (true) { // Main menu loop
+                        InputHandler.mainMenu();
+                    }
+
                 }
                
-                break; // Exit the loop or add a main menu loop
+                break; 
             }
         }
 
-       
+         // InputHandler.mainMenu();
 
     }
 
