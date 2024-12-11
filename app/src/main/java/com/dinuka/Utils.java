@@ -4,6 +4,7 @@ import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
+import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 
 public class Utils {
@@ -24,8 +25,8 @@ public class Utils {
 
     }
 
-     // Generate AES key from master password
-     public static SecretKeySpec getKeyFromPassword(String password) {
+    // Generate AES key from master password
+    public static SecretKeySpec getKeyFromPassword(String password) {
         try {
             // Use a simple method of generating an AES key from the password
             byte[] key = password.getBytes("UTF-8");
@@ -63,5 +64,12 @@ public class Utils {
             return null;
         }
     }
-    
+
+    // Utility method to encrypt data using AES key
+    public static String encryptData(String data, SecretKey aesKey) throws Exception {
+        Cipher cipher = Cipher.getInstance("AES");
+        cipher.init(Cipher.ENCRYPT_MODE, aesKey);
+        byte[] encryptedBytes = cipher.doFinal(data.getBytes(StandardCharsets.UTF_8));
+        return Base64.getEncoder().encodeToString(encryptedBytes);
+    }
 }

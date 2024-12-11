@@ -11,6 +11,10 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.Scanner;
 
+import javax.crypto.Cipher;
+import java.util.Base64;
+import javax.crypto.SecretKey;
+
 public class MainOps {
 
     public static void createNewRecord() {
@@ -48,23 +52,38 @@ public class MainOps {
                     return; // Exit and don't proceed further if the name is taken
                 }
             }
+             // Retrieve the AES key from SessionManager
+        SecretKey aesKey = SessionManager.getAESKey();
 
             // Step 2: Enter Hint
             System.out.println("Enter a Hint for this password \n(this will be encrypted too): ");
             String pwRecHint = scanner.nextLine().trim();
-            String encryptedHint = BCrypt.hashpw(pwRecHint, BCrypt.gensalt());
-
+            
             // Step 3: Enter Raw Password
             System.out.println("Enter the raw password");
             String rawPW = scanner.nextLine().trim();
-            String encryptedPw = BCrypt.hashpw(rawPW, BCrypt.gensalt());
+           
+            try {
+                String encryptedHint = Utils.encryptData(pwRecHint, aesKey);
+                String encryptedPw = Utils.encryptData(rawPW, aesKey);
+            
+                JSONObject newRecord = new JSONObject();
+                newRecord.put("name", pwRecName);
+                newRecord.put("hint", encryptedHint);
+                newRecord.put("password", encryptedPw);
+                userRecs.put(newRecord);
+            } catch (Exception e) {
+                System.err.println("Error encrypting data: " + e.getMessage());
+                return;
+            }
+            
 
             // Step 4: Create New Record and Save
-            JSONObject newRecord = new JSONObject();
-            newRecord.put("name", pwRecName);
-            newRecord.put("hint", encryptedHint);
-            newRecord.put("password", encryptedPw);
-            userRecs.put(newRecord);
+            // JSONObject newRecord = new JSONObject();
+            // newRecord.put("name", pwRecName);
+            // newRecord.put("hint", encryptedHint);
+            // newRecord.put("password", encryptedPw);
+            // userRecs.put(newRecord);
 
             // Step 5: Save the Updated JSON Object
             Files.write(notPwsFile.toPath(), dataToSendNotPw.toString(4).getBytes(StandardCharsets.UTF_8));

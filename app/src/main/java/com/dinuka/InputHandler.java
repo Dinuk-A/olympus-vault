@@ -6,6 +6,16 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.mindrot.jbcrypt.BCrypt;
 
+import javax.crypto.SecretKey;
+
+import java.nio.file.Files;
+
+import java.io.File;
+
+import java.security.spec.InvalidKeySpecException;
+import java.security.NoSuchAlgorithmException;
+
+
 public class InputHandler {
 
     private static final Scanner scan = new Scanner(System.in);
@@ -78,6 +88,50 @@ public class InputHandler {
 
     // check pws
     public static boolean validatePw() {
+        Scanner scanner = new Scanner(System.in);
+        JSONArray userList = UserManager.getUserList();
+        String username = UserManager.getLAstCheckedUserName();
+    
+        for (int attempt = 0; attempt < 3; attempt++) {
+            System.out.print("Enter your password (or type 'EXIT' to quit): ");
+            String enteredPw = scanner.nextLine();
+    
+            if (enteredPw.equalsIgnoreCase("EXIT")) {
+                System.out.println("Exiting...");
+                System.exit(0);
+            }
+    
+            for (int i = 0; i < userList.length(); i++) {
+                JSONObject user = userList.getJSONObject(i);
+    
+                if (user.getString("username").equals(username)) {
+                    String storedPw = user.getString("password");
+    
+                    if (BCrypt.checkpw(enteredPw, storedPw)) {
+                        System.out.println("Password validated successfully!");
+    
+                        // Derive AES key and store it in SessionManager
+                        byte[] salt = CryptoUtils.generateSalt(); // Retrieve or generate the salt
+                        try {
+                            SecretKey aesKey = CryptoUtils.deriveKey(enteredPw, salt);
+                            SessionManager.setAESKey(aesKey); // Store the key for this session
+                            return true; // Indicate successful validation
+                        } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
+                            System.err.println("Error deriving AES key: " + e.getMessage());
+                        }
+                    } else {
+                        System.out.println("Incorrect password. Try again. You have " + (2 - attempt) + " attempts.");
+                    }
+                }
+            }
+        }
+        System.out.println("Maximum attempts reached. Exiting...");
+        System.exit(0);
+        return false;
+    }
+    
+
+    public static boolean validatePwOri() {
 
         Scanner scanner = new Scanner(System.in);
         JSONArray userList = UserManager.getUserList();
@@ -101,7 +155,38 @@ public class InputHandler {
                     String storedPw = user.getString("password");
 
                     if (BCrypt.checkpw(enteredPw, storedPw)) {
-                        return true;
+                        System.out.println("Password validated successfully!");
+
+                        // Derive AES key and store in SessionManager
+                        // byte[] salt = CryptoUtils.getUserSalt(username);
+                        // SecretKey aesKey = CryptoUtils.deriveKeyFromPassword(enteredPw, salt);
+                        // SessionManager.setAesKey(aesKey); // Store the key for this session
+
+                        // try {
+                        // // Load or generate the salt (persistent)
+                        // byte[] salt;
+                        // File saltFile = new File("salt.dat");
+                        // if (saltFile.exists()) {
+                        // salt = Files.readAllBytes(saltFile.toPath());
+                        // } else {
+                        // salt = CryptoUtils.generateSalt();
+                        // Files.write(saltFile.toPath(), salt);
+                        // }
+
+                        // // Derive AES key from entered password and salt
+                        // SecretKey aesKey = CryptoUtils.deriveKey(enteredPw, salt);
+
+                        // // Store the AES key securely in memory for the session
+                        // SessionManager.setAESKey(aesKey);
+
+                        // System.out.println("AES key derived successfully for the session.");
+                        // return true;
+
+                        // } catch (Exception e) {
+                        // System.err.println("Error deriving AES key: " + e.getMessage());
+                        // return false;
+                        // }
+
                     } else {
                         System.out.println("Incorrect password. Try again. You have " + (2 - attempt) + " attempts");
                     }
@@ -116,15 +201,15 @@ public class InputHandler {
 
     public static void mainMenu() {
         Scanner scannerMM = new Scanner(System.in);
-    
+
         System.out.println("\n=== Main Menu ===");
         System.out.println("1. Create a New Password Record");
         System.out.println("2. View all records");
         System.out.println("3. Exit");
         System.out.print("Choose an option: ");
-    
+
         String choice = scannerMM.nextLine();
-    
+
         switch (choice) {
             case "1":
                 System.out.println("Creating a New Password Record");
@@ -134,16 +219,16 @@ public class InputHandler {
                 System.out.println("Viewing all records");
                 MainOps.viewAllRecs();
                 System.out.println("\nPress Enter to go back to the main menu...");
-                scannerMM.nextLine(); 
+                scannerMM.nextLine();
 
                 break;
             case "3":
                 System.out.println("Exiting the application. Goodbye!");
-                System.exit(0); 
+                System.exit(0);
                 break;
             default:
                 System.out.println("Invalid option. Please try again.");
         }
     }
-    
+
 }
