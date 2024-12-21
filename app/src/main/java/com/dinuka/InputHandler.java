@@ -111,9 +111,9 @@ public class InputHandler {
                         System.out.println("Password validated successfully!");
     
                         // Derive AES key and store it in SessionManager
-                        byte[] salt = Utils.generateSalt(); // Retrieve or generate the salt
+                        // byte[] salt = Utils.generateSalt(); // Retrieve or generate the salt
                         try {
-                            SecretKey aesKey = Utils.deriveKey(enteredPw, salt);
+                            SecretKey aesKey = Utils.deriveKey(enteredPw);
                             SessionManager.setAESKey(aesKey); // Store the key for this session
                             return true; // Indicate successful validation
                         } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {

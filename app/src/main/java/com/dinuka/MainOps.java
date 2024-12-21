@@ -10,6 +10,8 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.Scanner;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 
 import javax.crypto.Cipher;
 import java.util.Base64;
@@ -52,31 +54,33 @@ public class MainOps {
                     return; // Exit and don't proceed further if the name is taken
                 }
             }
-             // Retrieve the AES key from SessionManager
-        SecretKey aesKey = SessionManager.getAESKey();
+
+          
+            // Retrieve the AES key from SessionManager
+            SecretKey aesKey = SessionManager.getAESKey();
 
             // Step 2: Enter Hint
             System.out.println("Enter a Hint for this password \n(this will be encrypted too): ");
             String pwRecHint = scanner.nextLine().trim();
-            
+
             // Step 3: Enter Raw Password
             System.out.println("Enter the raw password");
             String rawPW = scanner.nextLine().trim();
-           
+
             try {
                 String encryptedHint = Utils.encryptData(pwRecHint, aesKey);
                 String encryptedPw = Utils.encryptData(rawPW, aesKey);
-            
+
                 JSONObject newRecord = new JSONObject();
                 newRecord.put("name", pwRecName);
                 newRecord.put("hint", encryptedHint);
                 newRecord.put("password", encryptedPw);
+              
                 userRecs.put(newRecord);
             } catch (Exception e) {
                 System.err.println("Error encrypting data: " + e.getMessage());
                 return;
             }
-            
 
             // Step 4: Create New Record and Save
             // JSONObject newRecord = new JSONObject();
@@ -137,8 +141,37 @@ public class MainOps {
 
         JSONObject selectedRec = userRecs.getJSONObject(recordNumber - 1);
         String name = selectedRec.getString("name");
-        String hint = selectedRec.getString("hint");
-        String password = selectedRec.getString("password");
+        String encryptedHint = selectedRec.getString("hint");
+        String encryptedPassword = selectedRec.getString("password");
+       
+
+        // SecretKey aesKey = SessionManager.getAESKey();
+
+        // Retrieve the stored salt
+        
+       
+
+        SecretKey aesKey = SessionManager.getAESKey();
+    
+
+        if (aesKey != null) {
+            try {
+                // Decrypt the password using the AES key
+                String decryptedPassword = Utils.decryptData(encryptedPassword, aesKey);
+
+                String decryptedHint = Utils.decryptData(encryptedHint, aesKey);
+
+                // Output the record with decrypted password
+                System.out.println("Name: " + name);
+                System.out.println("Hint: " + decryptedHint);
+                System.out.println("Password: " + decryptedPassword);
+            } catch (Exception e) {
+                // Handle the exception, e.g., print error message
+                System.out.println("Error decrypting password: " + e.getMessage());
+            }
+        } else {
+            System.out.println("No valid AES key found. Please log in again.");
+        }
 
     }
 
