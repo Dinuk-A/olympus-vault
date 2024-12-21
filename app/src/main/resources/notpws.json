@@ -1,45 +1,12 @@
 {"dinuka": [
     {
-        "password": "$2a$10$B17mH4eZGu5O.jhoY0Cza.r4W4LbHifGqzHcwXlShHTRpW9X3.hk.",
-        "hint": "$2a$10$Dld3hF0ATEEuro3E/.oCv.UVfJHnFl5GsdBxviE9p7lAItj74NGRS",
-        "name": "test name 1"
-    },
-    {
-        "password": "$2a$10$3mNTN375AmXSdpqusiCetemmmMJKrjRAalnwHkbT7qXvMU2pKtCeS",
-        "hint": "$2a$10$W5SUesjc2nnMDVBLSYMYYewHq3DrdzXhadcKmKFJ3KwwuG4lfA8c6",
-        "name": "scope"
-    },
-    {
-        "password": "Aik6CwskZCp/9R7YIkS5Hw==",
-        "hint": "53STMdbZ84YMb9QXQDQnRQ==",
-        "name": "dinua"
-    },
-    {
-        "password": "aW71veC8jWQdvQ+B0eyp/Q==",
-        "hint": "2xQkU8HnHZUO70UTw7SZFg==",
-        "name": "testtttttt"
-    },
-    {
-        "password": "QgyMk/etMMvxFL+Hg6Vgzw==",
-        "salt": "y/E8kkE5GZPDex3De2JhPQ==",
-        "hint": "LsHqJ0gebgTqN91Vg0Yzwg==",
-        "name": "1111111111111111"
-    },
-    {
-        "password": "+nQuhOBQH9kkzmWnhQTp5A==",
-        "salt": "Isi3ATv0bnuCNRiMQITeOw==",
-        "hint": "9myvL4WVM7iTJF3EXfVTnQ==",
-        "name": "222222222222222"
-    },
-    {
-        "password": "CAFz3RcESwai0L7Cr1ft5g==",
-        "salt": "eOIavTNldo3eISPt65ZnQg==",
-        "hint": "lo9QjjyvXwagUu0NPv2S6Q==",
-        "name": "3333333333333"
-    },
-    {
         "password": "2vdUm4e02dSuz2Eg24LNrA==",
         "hint": "nPz4cjAgNnvBriIYmGy9zA==",
         "name": "1212121121212"
+    },
+    {
+        "password": "kGvS9095GkJBJSyXXmXf9A==",
+        "hint": "6SgLFSULZZtTgx71msdxwQ==",
+        "name": "1"
     }
 ]}

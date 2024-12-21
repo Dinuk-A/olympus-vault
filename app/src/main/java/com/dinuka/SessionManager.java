@@ -16,8 +16,8 @@ public class SessionManager {
         return aesKey;
     }
 
-    public static boolean isAesKeyAvailable() {
-        return aesKey != null;
-    }
+    // public static boolean isAesKeyAvailable() {
+    //     return aesKey != null;
+    // }
 
 }

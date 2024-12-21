@@ -55,7 +55,6 @@ public class MainOps {
                 }
             }
 
-          
             // Retrieve the AES key from SessionManager
             SecretKey aesKey = SessionManager.getAESKey();
 
@@ -75,19 +74,12 @@ public class MainOps {
                 newRecord.put("name", pwRecName);
                 newRecord.put("hint", encryptedHint);
                 newRecord.put("password", encryptedPw);
-              
+
                 userRecs.put(newRecord);
             } catch (Exception e) {
                 System.err.println("Error encrypting data: " + e.getMessage());
                 return;
             }
-
-            // Step 4: Create New Record and Save
-            // JSONObject newRecord = new JSONObject();
-            // newRecord.put("name", pwRecName);
-            // newRecord.put("hint", encryptedHint);
-            // newRecord.put("password", encryptedPw);
-            // userRecs.put(newRecord);
 
             // Step 5: Save the Updated JSON Object
             Files.write(notPwsFile.toPath(), dataToSendNotPw.toString(4).getBytes(StandardCharsets.UTF_8));
@@ -143,16 +135,8 @@ public class MainOps {
         String name = selectedRec.getString("name");
         String encryptedHint = selectedRec.getString("hint");
         String encryptedPassword = selectedRec.getString("password");
-       
-
-        // SecretKey aesKey = SessionManager.getAESKey();
-
-        // Retrieve the stored salt
-        
-       
 
         SecretKey aesKey = SessionManager.getAESKey();
-    
 
         if (aesKey != null) {
             try {
