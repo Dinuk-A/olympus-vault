@@ -23,6 +23,7 @@ public class MainOps {
         Scanner scanner = new Scanner(System.in);
 
         // Step 1: Enter Record Name
+        System.out.println();
         System.out.println("Enter a name for this record: ");
         String pwRecName = scanner.nextLine().trim();
 
@@ -69,10 +70,12 @@ public class MainOps {
             // Retrieve the AES key from SessionManager
             SecretKey aesKey = SessionManager.getAESKey();
 
+            System.out.println();
             // Step 2: Enter Hint
             System.out.println("Enter a Hint for this password \n(this will be encrypted too): ");
             String pwRecHint = scanner.nextLine().trim();
 
+            System.out.println();
             // Step 3: Enter Raw Password
             System.out.println("Enter the raw password");
             String rawPW = scanner.nextLine().trim();
@@ -96,6 +99,7 @@ public class MainOps {
 
             // Step 5: Save the Updated JSON Object
             Files.write(notPwsFile.toPath(), notDataInPwFile.toString(4).getBytes(StandardCharsets.UTF_8));
+            Utils.clearConsole();
             System.out.println("Password record saved successfully!");
 
         } catch (IOException e) {
@@ -118,7 +122,7 @@ public class MainOps {
             JSONArray userRecs = notDataInPwFile.optJSONArray(username);
 
             if (userRecs != null && userRecs.length() > 0) {
-                System.out.println("\n=== List of Records ===");
+                System.out.println("\n####### List of Records #######");
 
                 for (int i = 0; i < userRecs.length(); i++) {
 
@@ -132,7 +136,9 @@ public class MainOps {
 
                 int selectedRecordNumber = scanner.nextInt();
 
-                if (selectedRecordNumber < userRecs.length()) {
+                if (selectedRecordNumber <= userRecs.length()) {
+
+                    Utils.clearConsole();
                     // to open a single record
                     openThisRecord(userRecs, selectedRecordNumber);
                 } else if (selectedRecordNumber > userRecs.length()) {
@@ -167,6 +173,8 @@ public class MainOps {
 
                 String decryptedHint = Utils.decryptData(encryptedHint, aesKey);
 
+                System.out.println("####### You are viewing a record #######");
+                System.out.println();
                 // Output the record with decrypted password
                 System.out.println("Name: " + name);
                 System.out.println("Hint: " + decryptedHint);
@@ -188,17 +196,19 @@ public class MainOps {
 
         // Retrieve the ID of the selected JSON record
         int selectedObjId = jObject.getInt("id");
-        System.out.println("Editing record with ID: " + selectedObjId);
 
         // Get a scanner for user input
         Scanner scan = new Scanner(System.in);
 
+        System.out.println();
         System.out.println("Enter the new name: ");
         String newName = scan.nextLine().trim();
 
+        System.out.println();
         System.out.println("Enter a new Hint for this password (this will be encrypted): ");
         String newHint = scan.nextLine().trim();
 
+        System.out.println();
         System.out.println("Enter the new raw password: ");
         String newPassword = scan.nextLine().trim();
 
@@ -253,7 +263,6 @@ public class MainOps {
 
         // Retrieve the ID of the selected JSON record
         int selectedObjId = jObject.getInt("id");
-        System.out.println("Deleting record with ID: " + selectedObjId);
 
         // Load the existing JSON file
         File notPwsFile = new File("D:\\PROJECTS\\Olympus Vault\\app\\src\\main\\resources\\notpws.json");
@@ -287,34 +296,6 @@ public class MainOps {
         } catch (IOException e) {
             System.out.println("Error deleting record: " + e.getMessage());
         }
-    }
-
-    // edit a rec
-    public static void editRecord2(JSONObject jObject) {
-
-        // get the id of this selected json record
-        int selectedObjId = jObject.getInt("id");
-        System.out.println(selectedObjId);
-
-        Scanner scan = new Scanner(System.in);
-
-        System.out.println();
-        System.out.println("enter the new name");
-        String newName = scan.nextLine().trim();
-
-        System.out.println("Enter a new Hint for this password \n(this will be encrypted too): ");
-        String newHint = scan.nextLine().trim();
-
-        // Step 3: Enter Raw Password
-        System.out.println("Enter the new raw password");
-        String newPassword = scan.nextLine().trim();
-
-        // lets just skip the encryption part for now
-
-        jObject.put("name", newName);
-        jObject.put("hint", newHint);
-        jObject.put("password", newPassword);
-
     }
 
 }

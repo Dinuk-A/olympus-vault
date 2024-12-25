@@ -13,6 +13,7 @@ public class App {
                 System.out.println("NAME NOT FOUND");
                 InputHandler.handleUserNotFound();
             } else {
+                Utils.clearConsole();
                 System.out.println("Welcome back!");
 
                 if (InputHandler.validatePw()) {

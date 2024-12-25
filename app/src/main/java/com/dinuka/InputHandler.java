@@ -106,6 +106,7 @@ public class InputHandler {
                     String storedPw = user.getString("password");
 
                     if (BCrypt.checkpw(enteredPw, storedPw)) {
+                        Utils.clearConsole();
                         System.out.println("Password validated successfully!");
 
                         // Derive AES key and store it in SessionManager
@@ -142,11 +143,13 @@ public class InputHandler {
 
         switch (choice) {
             case "1":
-                System.out.println("Creating a New Password Record");
+                Utils.clearConsole();
+                System.out.println("######## Creating a New Password Record #######");
                 MainOps.createNewRecord();
                 break;
             case "2":
-                System.out.println("Viewing all records");
+                Utils.clearConsole();
+                System.out.println("######## Viewing all records ########");
                 MainOps.viewAllRecs();
 
                 // The method just waits for the next action and moves on to the next line of
@@ -168,33 +171,34 @@ public class InputHandler {
     // show options when a new rec opened
     public static void showRecOpts(JSONObject selectedRec) {
         System.out.println();
-        System.out.println("++++++ Record Options +++++");
+        System.out.println("####### Record Options #######");
         System.out.println("1. Edit the selected record");
         System.out.println("2. Delete the selected record");
         System.out.println("3. Exit");
         System.out.println();
         System.out.print("Please choose an option (1, 2, or 3): ");
-    
+
         Scanner pwRecOptScanner = new Scanner(System.in);
         String choice = pwRecOptScanner.nextLine();
-    
+
         switch (choice) {
             case "1":
-                System.out.println("You chose to edit the record.");
+                Utils.clearConsole();
                 System.out.println("Editing the record for: " + selectedRec.getString("name"));
                 MainOps.editRecord(selectedRec);
                 break;
             case "2":
-                System.out.println("You chose to delete the record.");
+                Utils.clearConsole();
                 System.out.println("Deleting the record for: " + selectedRec.getString("name"));
                 MainOps.deleteRecord(selectedRec);
                 break;
             case "3":
+                Utils.clearConsole();
                 System.out.println("Exiting the options menu.");
                 break;
             default:
                 System.out.println("Invalid input. Please enter 1, 2, or 3.");
         }
     }
-    
+
 }
